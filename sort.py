@@ -27,12 +27,12 @@ def normalize(file_name: str) -> str:
 import normalize
 
 def handle_file(item, new_name = ''):
-    new_folder = Path('test')/new_name
+    new_folder = Path(sys.argv[1])/new_name
     new_folder.mkdir(exist_ok=True, parents=True)
     item.replace(new_folder / normalize.normalize(file_name = item.name))
 
 def handle_archive(item, new_name = ''):
-    archive_folder = Path('test')/new_name
+    archive_folder = Path(sys.argv[1])/new_name
     archive_folder.mkdir(exist_ok=True, parents=True)
     
     base = normalize.normalize(item.stem)
@@ -60,7 +60,7 @@ extensions = set()
 others = set()
 
 def sort_objects(path):
-    folder = Path(path)
+    #folder = Path(path)
     for item in folder.iterdir():
         if item.is_dir():
             sort_objects(item)
@@ -91,10 +91,10 @@ def sort_objects(path):
                              
     return extensions - others, others
 
-print(sort_objects('test'))  
+#print(sort_objects('test'))  
 
 def remove_empty_folders(path):
-    folder = Path(path)
+    #folder = Path(path)
     for item in folder.iterdir():
         if item.is_dir():
             remove_empty_folders(item)
@@ -103,10 +103,10 @@ def remove_empty_folders(path):
                 #print(f"{item} removed")
             except OSError:
                 pass
-remove_empty_folders('test')
+#remove_empty_folders('test')
 
 def print_folders(path):
-    folder = Path(path)
+    #folder = Path(path)
     for item in folder.iterdir():
         print(item.name)
         files_list = set()
@@ -114,9 +114,15 @@ def print_folders(path):
             files_list.add(file.name)
         print(files_list)
         
-print_folders('test')
+#print_folders('test')
 
-
+if __name__ == '__sort__':
+    path = sys.argv[1]
+    folder = Path(path)
+    
+    sort_objects(path)
+    remove_empty_folders(path)
+    print_folders(path)
 
 
 
