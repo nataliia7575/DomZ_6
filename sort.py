@@ -1,12 +1,13 @@
+import re
 import os
 import sys
+
 import shutil
+
 from pathlib import Path
 
 def get_extensions(file_name):
     return Path(file_name).suffix[1:]
-
-import re
 
 UKRAINIAN_SYMBOLS = 'абвгдеєжзиіїйклмнопрстуфхцчшщьюя'
 TRANSLATION = ("a", "b", "v", "g", "d", "e", "je", "zh", "z", "y", "i", "ji", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
@@ -24,18 +25,18 @@ def normalize(file_name: str) -> str:
     new_name = re.sub(r'\W', '_', new_name)
     return f"{new_name}.{'.'.join(extension)}"
 
-import normalize
+
 
 def handle_file(item, new_name = ''):
     new_folder = Path(sys.argv[1])/new_name
     new_folder.mkdir(exist_ok=True, parents=True)
-    item.replace(new_folder / normalize.normalize(file_name = item.name))
+    item.replace(new_folder / normalize(file_name = item.name))
 
 def handle_archive(item, new_name = ''):
     archive_folder = Path(sys.argv[1])/new_name
     archive_folder.mkdir(exist_ok=True, parents=True)
     
-    base = normalize.normalize(item.stem)
+    base = normalize(item.stem)
     
 
     target_folder = archive_folder / base
@@ -49,6 +50,18 @@ def handle_archive(item, new_name = ''):
         archive_folder.rmdir()
         return
     item.unlink()
+
+def remove_empty_folders(path):
+    #folder = Path(path)
+    for item in folder.iterdir():
+        if item.is_dir():
+            remove_empty_folders(item)
+            try:
+                item.rmdir()
+                #print(f"{item} removed")
+            except OSError:
+                pass
+#remove_empty_folders('test')
    
 Pictures = ('jpeg', 'png', 'jpg', 'svg')
 Docs = ('txt', 'docx', 'doc', 'pdf', 'xlsx', 'pptx')
@@ -93,17 +106,7 @@ def sort_objects(path):
 
 #print(sort_objects('test'))  
 
-def remove_empty_folders(path):
-    #folder = Path(path)
-    for item in folder.iterdir():
-        if item.is_dir():
-            remove_empty_folders(item)
-            try:
-                item.rmdir()
-                #print(f"{item} removed")
-            except OSError:
-                pass
-#remove_empty_folders('test')
+
 
 def print_folders(path):
     #folder = Path(path)
@@ -112,17 +115,19 @@ def print_folders(path):
         files_list = set()
         for file in item.iterdir():
             files_list.add(file.name)
-        print(files_list)
+        print(files_list)    
         
-#print_folders('test')
+#print_folders('test')        
 
-if __name__ == '__sort__':
+if __name__ == "__main__":
     path = sys.argv[1]
     folder = Path(path)
-    
     sort_objects(path)
     remove_empty_folders(path)
     print_folders(path)
+    
+    
+    
 
 
 
