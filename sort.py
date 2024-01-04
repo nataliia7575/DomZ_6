@@ -52,7 +52,7 @@ def handle_archive(item, new_name = ''):
     item.unlink()
 
 def remove_empty_folders(path):
-    #folder = Path(path)
+    folder = Path(path)
     for item in folder.iterdir():
         if item.is_dir():
             remove_empty_folders(item)
@@ -62,7 +62,7 @@ def remove_empty_folders(path):
             except OSError:
                 pass
 #remove_empty_folders('test')
-   
+            
 Pictures = ('jpeg', 'png', 'jpg', 'svg')
 Docs = ('txt', 'docx', 'doc', 'pdf', 'xlsx', 'pptx')
 Videos = ('mp4', 'avi', 'mov', 'mkv')
@@ -73,7 +73,7 @@ extensions = set()
 others = set()
 
 def sort_objects(path):
-    #folder = Path(path)
+    folder = Path(path)
     for item in folder.iterdir():
         if item.is_dir():
             sort_objects(item)
@@ -104,27 +104,27 @@ def sort_objects(path):
                              
     return extensions - others, others
 
-#print(sort_objects('test'))  
-
-
-
 def print_folders(path):
-    #folder = Path(path)
+    folder = Path(path)
     for item in folder.iterdir():
         print(item.name)
         files_list = set()
         for file in item.iterdir():
             files_list.add(file.name)
-        print(files_list)    
-        
-#print_folders('test')        
+        print(files_list)  
 
-if __name__ == "__main__":
-    path = sys.argv[1]
-    folder = Path(path)
-    sort_objects(path)
+
+def main(path):
     remove_empty_folders(path)
+    sort_objects(path)
     print_folders(path)
+
+if __name__ == '__main__':
+    path = sys.argv[1]
+    print(f'Start in {path}')
+
+    folder = Path(path)
+    main(folder.resolve())
     
     
     
