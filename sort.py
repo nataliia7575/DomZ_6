@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 def get_extensions(file_name):
-    return Path(file_name).suffix[1:]
+    return Path(file_name).suffix[1:].lower()
 
 UKRAINIAN_SYMBOLS = 'абвгдеєжзиіїйклмнопрстуфхцчшщьюя'
 TRANSLATION = ("a", "b", "v", "g", "d", "e", "je", "zh", "z", "y", "i", "ji", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u",
@@ -115,8 +115,8 @@ def print_folders(path):
 
 
 def main(path):
-    remove_empty_folders(path)
     sort_objects(path)
+    remove_empty_folders(path)
     print_folders(path)
 
 if __name__ == '__main__':
